@@ -1,0 +1,299 @@
+1.
+using System;
+
+namespace Abstraction
+{
+    public interface INguoiLinh
+    {
+        void HanhQuan();
+        void PhongThu();
+        void TanCong();
+
+    }
+    abstract class BoBinh : INguoiLinh
+    {
+        public abstract void HanhQuan();
+        public abstract void PhongThu();
+        public void TanCong()
+        {
+            Console.WriteLine("Tan cong kieu bo binh!");
+        }
+        public virtual void DoTham()
+        {
+            Console.WriteLine("Do tham kieu bo binh!"); 
+        }
+    }
+    class TangThietGiap : BoBinh
+    {
+        public override void HanhQuan()
+        {
+            Console.WriteLine("Hanh quan kieu tang thiet giap!");
+        }
+        public override void PhongThu()
+        {
+            Console.WriteLine("Phong thu kieu tang thiet giap!");
+        }
+    }
+    class CongBinh : BoBinh
+    {
+        public override void PhongThu()
+        {
+            Console.WriteLine("Phong thu kieu cong binh!");
+        }
+        public override void HanhQuan()
+        {
+            Console.WriteLine("Hanh quan kieu cong binh!");
+        }
+        public override void DoTham()
+        {
+            Console.WriteLine("Do tham kieu Cong binh!");
+        }
+    }
+    class PhaoBinh : BoBinh
+    {
+        public override void HanhQuan()
+        {
+            Console.WriteLine("Hanh quan kieu phao binh!");
+        }
+        public override void PhongThu()
+        {
+            Console.WriteLine("Phong thu kieu phao binh!");
+        }
+    }
+    class KhongQuan : INguoiLinh
+    {
+        public void HanhQuan()
+        {
+            Console.WriteLine("Hanh quan kieu khong quan!");
+        }
+        public void PhongThu()
+        {
+            Console.WriteLine("Phong thu kieu khong quan!");
+        }
+        public void TanCong()
+        {
+            Console.WriteLine("Tan cong kieu khong quan!");
+        }
+    }
+    class HaiQuan : INguoiLinh
+    {
+        public void HanhQuan()
+        {
+            Console.WriteLine("Hanh quan kieu hai quan!");
+        }
+        public void PhongThu()
+        {
+            Console.WriteLine("Phong thu kieu hai quan!");
+        }
+        public void TanCong()
+        {
+            Console.WriteLine("Tan cong kieu hai quan!");
+        }
+    }
+
+    class Program
+    {
+    static void Main(string[] args)
+        {
+            INguoiLinh[] danhSach = new INguoiLinh[]
+            {
+                new CongBinh(),
+                new TangThietGiap(),
+                new PhaoBinh(),
+                new KhongQuan(),
+                new HaiQuan()
+            };
+
+            foreach (var linh in danhSach)
+            {
+                linh.HanhQuan();
+                linh.TanCong();
+                linh.PhongThu();
+                Console.WriteLine("----");
+            }
+
+        }
+    }
+}
+2.
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp1
+{
+    class Account
+    {
+        protected int _maso;
+        protected string _ten;
+        protected double _sodu;
+
+        public virtual void NhapDuLieu()
+        {
+            Console.Write("Nhap ma so: ");
+            _maso = int.Parse(Console.ReadLine());
+
+            Console.Write("Nhap ten: ");
+            _ten = Console.ReadLine();
+
+            Console.Write("Nhap so du: ");
+            _sodu = double.Parse(Console.ReadLine());
+        }
+        public virtual void GuiTien(double sotien)
+        {
+            if (sotien > 0)
+            {
+                _sodu += sotien;
+            }
+        }
+        public virtual void RutTien(double sotien)
+        {
+            if (sotien > 0 && sotien <= _sodu)
+            {
+                _sodu -= sotien;
+            }
+        }
+
+        public virtual void XemGiaoDich()
+        {
+            Console.WriteLine("=== TAI KHOAN THUONG ===");
+            Console.WriteLine($"Ma so: {_maso}");
+            Console.WriteLine($"Ten: {_ten}");
+            Console.WriteLine($"So du: {_sodu}");
+        }
+    }
+
+    class VipAccount : Account
+    {
+        private int _diemthuong;
+
+        private List<double> dsguitien = new List<double>();
+        private List<double> dsruttien = new List<double>();
+
+        private void TichDiem(double sotien)
+        {
+            _diemthuong += (int)(sotien / 1000);
+        }
+
+        public override void GuiTien(double sotien)
+        {
+            base.GuiTien(sotien);
+            dsguitien.Add(sotien);
+            TichDiem(sotien);
+        }
+
+        public override void RutTien(double sotien)
+        {
+            base.RutTien(sotien);
+            dsruttien.Add(sotien);
+        }
+
+        public override void XemGiaoDich()
+        {
+            Console.WriteLine("=== TAI KHOAN VIP ===");
+
+            Console.WriteLine("Danh sach gui tien:");
+            foreach (double t in dsguitien)
+                Console.WriteLine(t);
+
+            Console.WriteLine("Danh sach rut tien:");
+            foreach (double t in dsruttien)
+                Console.WriteLine(t);
+
+            Console.WriteLine($"So du hien tai: {_sodu}");
+            Console.WriteLine($"Diem thuong: {_diemthuong}");
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Account acc = new VipAccount();
+
+            acc.NhapDuLieu();
+            acc.GuiTien(5000);
+            acc.RutTien(2000);
+
+            acc.XemGiaoDich();
+
+            Console.ReadLine();
+        }
+    }
+}
+3.
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OOP_Programming
+{
+    internal class practice_override
+    {
+        class Animal
+        {
+            public virtual void Speak()
+            {
+                Console.WriteLine("Say something!!!");
+            }
+            public void Move(int speed)
+            {
+                Console.WriteLine("Animal move " + speed.ToString());
+            }
+        }
+        class Cat : Animal
+        {
+            public override void Speak()
+            {
+                Console.WriteLine("MEOW");
+            }
+            public void Run()
+            {
+                Console.WriteLine("Run");
+            }
+        }
+        class Dog : Animal
+        {
+            public override void Speak()
+            {
+                Console.WriteLine("Woof Woof");
+            }
+        }
+        class Rabbit : Animal
+        {
+            public override void Speak()
+            {
+                Console.WriteLine("Say new Rabit!");
+            }
+            public void Run()
+            {
+                Console.WriteLine("Run");
+            }
+        }
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Animal!");
+            Animal any = new Animal();
+            any.Speak();
+
+            Console.WriteLine("Cat!");
+            Cat objCat = new Cat();
+            objCat.Speak();
+
+            Console.WriteLine("Rabbit");
+            Rabbit objRabbit = new Rabbit();
+            objRabbit.Speak();
+
+            Console.WriteLine("Dog");
+            Dog objDog = new Dog();
+            objDog.Speak();
+
+            Animal any2 = new Dog();
+            any2.Speak();
+
+            Animal any3 = new Rabbit();
+            any3.Speak();
+        }
+    }
+}
